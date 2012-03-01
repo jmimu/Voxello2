@@ -1,0 +1,37 @@
+QT       -= gui core
+
+TARGET = voxello2appli
+CONFIG   += console
+CONFIG   -= app_bundle
+
+TEMPLATE = app
+
+
+SOURCES += appli.cpp \
+    voximg.cpp \
+    voxspr.cpp \
+    snowball.cpp \
+    vox_scene.cpp \
+    vox_particle.cpp \
+    particle_manager.cpp \
+    mat3x3.cpp \
+    pt3d.cpp \
+    graph_SFML.cpp \
+    draw_vox_ortho.cpp
+
+HEADERS += \
+    voximg.h \
+    voxspr.h \
+    snowball.h \
+    vox_scene.h \
+    vox_particle.h \
+    particle_manager.h \
+    graph.h \
+    mat3x3.h \
+    pt3d.h \
+    graph_SFML.h \
+    draw_vox_ortho.h
+
+
+LIBS += -lsfml-graphics -lsfml-window -lsfml-system
+
