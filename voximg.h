@@ -34,6 +34,7 @@ public:
     virtual ~VoxImg();
     //load form voxlap file
     bool load_from_VOX (std::string filnam,int direction=EAST);///load Ken Silverman's Voxlap5 VOX format
+    bool load_from_ply (std::string filnam,unsigned short _xsiz, unsigned short _ysiz, unsigned short _zsiz);///create voximg from a ply point cloud
     unsigned char *voxels;
     unsigned char palette[256][3];
 

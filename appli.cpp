@@ -21,6 +21,12 @@ int main(int argc, char *argv[])
     
     Graph *graph=new Graph_SFML();
     graph->init();
+    
+    VoxImg test("data/perso_stand.vox",0,VOX_FILE);
+    test.load_from_ply("data/NuageImProf_LeChantier_Etape_5.ply",50,50,50);
+    
+    
+    
     //create vox obj
     std::vector<VoxImg*> walk_anim[4];//for directions E S W N
     std::vector<VoxImg*> throw_anim[4];//for directions E S W N

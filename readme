@@ -18,6 +18,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ////////////////////////////////////////////////////////////////////////
 
+Using some code from Greg Turk PLY IO code
+http://people.sc.fsu.edu/~jburkardt/data/ply/ply.html
+
+////////////////////////////////////////////////////////////////////////
 
 Test program for a voxel-based engine.
 Needs SFMLv2. There is a SDL version, but without color.

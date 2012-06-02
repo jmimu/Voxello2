@@ -17,7 +17,8 @@ SOURCES += appli.cpp \
     mat3x3.cpp \
     pt3d.cpp \
     graph_SFML.cpp \
-    draw_vox_ortho.cpp
+    draw_vox_ortho.cpp\
+    ply_io/ply_io.c
 
 HEADERS += \
     voximg.h \
@@ -30,7 +31,8 @@ HEADERS += \
     mat3x3.h \
     pt3d.h \
     graph_SFML.h \
-    draw_vox_ortho.h
+    draw_vox_ortho.h\
+    ply_io/ply_io.h
 
 
 LIBS += -lsfml-graphics -lsfml-window -lsfml-system

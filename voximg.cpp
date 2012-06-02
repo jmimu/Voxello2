@@ -5,6 +5,7 @@
 
 #include <iostream>
 
+#include "ply_io/ply_io.h"
 
 
 VoxImg::VoxImg() :
@@ -190,4 +191,30 @@ bool VoxImg::load_from_VOX (std::string filnam,int direction)
     return true;
 }
 
+
+
+bool VoxImg::load_from_ply (std::string filnam,unsigned short _xsiz, unsigned short _ysiz, unsigned short _zsiz)///create voximg from a ply point cloud
+{
+    std::cout<<"enter load_from_ply"<<std::endl;
+    xsiz=_xsiz;
+    ysiz=_ysiz;
+    zsiz=_zsiz;
+    xyzsiz=xsiz*ysiz*zsiz;
+    yzsiz=ysiz*zsiz;
+
+
+    FILE *fil;
+    
+    //unsigned char *voxels;
+
+    fil = fopen(filnam.c_str(),"rb"); if (!fil) return(false);
+
+    PlyFile * ply;
+    ply=read_ply(fil);
+    //...
+    std::cout<<"load_from_ply OK"<<std::endl;
+
+
+    return true;
+}
 
