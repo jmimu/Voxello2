@@ -71,9 +71,9 @@ int main(int argc, char *argv[])
 
     //----- timing -----
     sf::Clock clock;
-    unsigned long last_time = clock.GetElapsedTime().AsMilliseconds();
+    unsigned long last_time = clock.getElapsedTime().asMilliseconds();
     unsigned long current_time,ellapsed_time,start_time;
-    unsigned long previous_fps_time=clock.GetElapsedTime().AsMilliseconds()/1000;
+    unsigned long previous_fps_time=clock.getElapsedTime().asMilliseconds()/1000;
     int fps=0;
 
 
@@ -92,32 +92,32 @@ int main(int argc, char *argv[])
 
     bool run=true;
     double t=0.0;
-    while (((Graph_SFML*)graph)->getWindow()->IsOpen() && run)
+    while (((Graph_SFML*)graph)->getWindow()->isOpen() && run)
     {
         fps++;
-        while (((Graph_SFML*)graph)->getWindow()->PollEvent(event))
+        while (((Graph_SFML*)graph)->getWindow()->pollEvent(event))
         {
             // Window closed or escape key pressed : exit
-            if ((event.Type == sf::Event::Closed) || 
-               ((event.Type == sf::Event::KeyPressed) && (event.Key.Code == sf::Keyboard::Escape)))
+            if ((event.type == sf::Event::Closed) || 
+               ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape)))
             {
-                ((Graph_SFML*)graph)->getWindow()->Close();
+                ((Graph_SFML*)graph)->getWindow()->close();
                 break;
             }
-            if (event.Type == sf::Event::MouseMoved)
+            if (event.type == sf::Event::MouseMoved)
             {
-                angleZ = event.MouseMove.X*0.01;
-                angleX = 3.14+event.MouseMove.Y*0.01;
+                angleZ = event.mouseMove.x*0.01;
+                angleX = 3.14+event.mouseMove.y*0.01;
             }
-            if (event.Type == sf::Event::MouseWheelMoved)
+            if (event.type == sf::Event::MouseWheelMoved)
             {
-                graph->ORTHO_ZOOM+=event.MouseWheel.Delta/10.0;
+                graph->ORTHO_ZOOM+=event.mouseWheel.delta/10.0;
             }
         }
         
         double move_x=0;
         double move_y=0;
-        if (sf::Keyboard::IsKeyPressed(sf::Keyboard::Space))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         {
             if (action==0) action=1;
         }
@@ -125,68 +125,68 @@ int main(int argc, char *argv[])
         previous_pos.copy(pos);
         if (action==0)
         {
-            if (sf::Keyboard::IsKeyPressed(sf::Keyboard::Return))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
             {
                 action=2;
                 anim_index=0;
                 ball_thrown=false;
             }
-            if ((sf::Keyboard::IsKeyPressed(sf::Keyboard::Left))&&(action==0))
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left))&&(action==0))
             {
                 move_x=-1;
                 move_y=0;
                 perso_moves=true;
             }
-            if ((sf::Keyboard::IsKeyPressed(sf::Keyboard::Right))&&(action==0))
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right))&&(action==0))
             {
                 move_x=+1;
                 move_y=0;
                 perso_moves=true;
             }
-            if ((sf::Keyboard::IsKeyPressed(sf::Keyboard::Up))&&(action==0))
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Up))&&(action==0))
             {
                 move_x=0;
                 move_y=+1;
                 perso_moves=true;
             }
-            if ((sf::Keyboard::IsKeyPressed(sf::Keyboard::Down))&&(action==0))
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Down))&&(action==0))
             {
                 move_x=0;
                 move_y=-1;
                 perso_moves=true;
             }
 
-            if ((sf::Keyboard::IsKeyPressed(sf::Keyboard::D))&&(action==0))
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::D))&&(action==0))
             {
                 move_x=-pseudo_normalize(draw->vect_vox_x_c.x,graph->ORTHO_ZOOM);
                 move_y=-pseudo_normalize(draw->vect_vox_y_c.x,graph->ORTHO_ZOOM);
                 perso_moves=true;
             }
-            if ((sf::Keyboard::IsKeyPressed(sf::Keyboard::G))&&(action==0))
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::G))&&(action==0))
             {
                 move_x=+pseudo_normalize(draw->vect_vox_x_c.x,graph->ORTHO_ZOOM);
                 move_y=+pseudo_normalize(draw->vect_vox_y_c.x,graph->ORTHO_ZOOM);
                 perso_moves=true;
             }
-            if ((sf::Keyboard::IsKeyPressed(sf::Keyboard::R))&&(action==0))
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::R))&&(action==0))
             {
                 move_x=-pseudo_normalize(draw->vect_vox_x_c.z,graph->ORTHO_ZOOM);
                 move_y=-pseudo_normalize(draw->vect_vox_y_c.z,graph->ORTHO_ZOOM);
                 perso_moves=true;
             }
-            if ((sf::Keyboard::IsKeyPressed(sf::Keyboard::F))&&(action==0))
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F))&&(action==0))
             {
                 move_x=+pseudo_normalize(draw->vect_vox_x_c.z,graph->ORTHO_ZOOM);
                 move_y=+pseudo_normalize(draw->vect_vox_y_c.z,graph->ORTHO_ZOOM);
                 perso_moves=true;
             }
-            if ((sf::Keyboard::IsKeyPressed(sf::Keyboard::T))&&(action==0))
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::T))&&(action==0))
             {
                 move_x=-pseudo_normalize(draw->vect_vox_x_c.y,graph->ORTHO_ZOOM);
                 move_y=-pseudo_normalize(draw->vect_vox_y_c.y,graph->ORTHO_ZOOM);
                 perso_moves=true;
             }
-            if ((sf::Keyboard::IsKeyPressed(sf::Keyboard::E))&&(action==0))
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::E))&&(action==0))
             {
                 move_x=+pseudo_normalize(draw->vect_vox_x_c.y,graph->ORTHO_ZOOM);
                 move_y=+pseudo_normalize(draw->vect_vox_y_c.y,graph->ORTHO_ZOOM);
@@ -332,10 +332,10 @@ int main(int argc, char *argv[])
             previous_fps_time=current_time/1000;
             fps=0;
         }
-        current_time = clock.GetElapsedTime().AsMilliseconds();
+        current_time = clock.getElapsedTime().asMilliseconds();
         ellapsed_time = current_time - last_time;
         last_time = current_time;
-        ellapsed_time =clock.GetElapsedTime().AsMilliseconds() - start_time;
+        ellapsed_time =clock.getElapsedTime().asMilliseconds() - start_time;
         //----- end timing -----
         
     }

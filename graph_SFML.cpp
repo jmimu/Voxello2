@@ -11,22 +11,22 @@ Graph_SFML::Graph_SFML():Graph(),App(),one_voxel_picture(),sprite_voxel(),surfac
 
 void Graph_SFML::init()
 {
-    App.Create(sf::VideoMode(256*4, 192*4, 8), "SFML Window");
-    one_voxel_picture.Create(SUB_PICTURE_SIZE,SUB_PICTURE_SIZE);
+    App.create(sf::VideoMode(256*4, 192*4, 8), "SFML Window");
+    one_voxel_picture.create(SUB_PICTURE_SIZE,SUB_PICTURE_SIZE);
 
-    sprite_voxel.SetTexture(one_voxel_picture.GetTexture());
+    sprite_voxel.setTexture(one_voxel_picture.getTexture());
 }
 
 void Graph_SFML::start_frame()
 {
-    App.Clear();
+    App.clear();
     //one_voxel_picture.Draw(sf::Shape::Rectangle(surface_coverage.Left,surface_coverage.Top,surface_coverage.Right,surface_coverage.Bottom, sf::Color(0,0,0));
-    one_voxel_picture.Clear(sf::Color(0,0,0,0));
+    one_voxel_picture.clear(sf::Color(0,0,0,0));
 }
 
 void Graph_SFML::end_frame()
 {
-    App.Display();
+    App.display();
 }
 
 void Graph_SFML::line(int x1,int y1,int x2,int y2,unsigned short r,unsigned short g,unsigned short b)
@@ -43,16 +43,16 @@ void Graph_SFML::quad(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,un
 void Graph_SFML::quad(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,unsigned short r,unsigned short g,unsigned short b)
 {
     sf::ConvexShape Polygon(4);
-    Polygon.SetPoint(0,sf::Vector2f(x1,SUB_PICTURE_SIZE-y1));
-    Polygon.SetPoint(1,sf::Vector2f(x2,SUB_PICTURE_SIZE-y2));
-    Polygon.SetPoint(2,sf::Vector2f(x3,SUB_PICTURE_SIZE-y3));
-    Polygon.SetPoint(3,sf::Vector2f(x4,SUB_PICTURE_SIZE-y4));
-    Polygon.SetFillColor(sf::Color(r,g,b));
+    Polygon.setPoint(0,sf::Vector2f(x1,SUB_PICTURE_SIZE-y1));
+    Polygon.setPoint(1,sf::Vector2f(x2,SUB_PICTURE_SIZE-y2));
+    Polygon.setPoint(2,sf::Vector2f(x3,SUB_PICTURE_SIZE-y3));
+    Polygon.setPoint(3,sf::Vector2f(x4,SUB_PICTURE_SIZE-y4));
+    Polygon.setFillColor(sf::Color(r,g,b));
 
     //Polygon.SetColor(sf::Color(255, 255, 255));
     //Polygon.EnableOutline(true);
     //Polygon.SetOutlineThickness(1);
-    one_voxel_picture.Draw(Polygon);
+    one_voxel_picture.draw(Polygon);
 }
 
 void Graph_SFML::close()
@@ -85,7 +85,7 @@ void Graph_SFML::create_one_voxel_picture(Pt3d &M_000_c,Pt3d &vect_vox_x_c,Pt3d 
     */
 
     //one_voxel_picture.Draw(sf::Shape::Rectangle(surface_coverage.Left,surface_coverage.Top,surface_coverage.Right,surface_coverage.Bottom, sf::Color(0,0,0));
-    one_voxel_picture.Clear(sf::Color(0,0,0,0));
+    one_voxel_picture.clear(sf::Color(0,0,0,0));
 
 /*    float pt0x=M_000_c.x*ORTHO_ZOOM+(SUB_PICTURE_SIZE>>1) ;
     float pt0y=M_000_c.y*ORTHO_ZOOM+(SUB_PICTURE_SIZE>>1) ;
@@ -161,14 +161,14 @@ void Graph_SFML::create_one_voxel_picture(Pt3d &M_000_c,Pt3d &vect_vox_x_c,Pt3d 
     surface_coverage.Width=max_x;
     surface_coverage.Height=max_y;*/
 
-    surface_coverage.Left=min_x;
-    surface_coverage.Top=min_y;
-    surface_coverage.Width=max_x-min_x;
-    surface_coverage.Height=max_y-min_y;
+    surface_coverage.left=min_x;
+    surface_coverage.top=min_y;
+    surface_coverage.width=max_x-min_x;
+    surface_coverage.height=max_y-min_y;
     //std::cout<<surface_coverage.Left<<" "<<surface_coverage.Top<<" "<<surface_coverage.Width<<" "<<surface_coverage.Height<<"\n";
     //std::cout<<min_y<<" "<<max_y<<" "<<max_y-min_y;
-    sprite_voxel.SetTexture(one_voxel_picture.GetTexture());
-    sprite_voxel.SetTextureRect(surface_coverage);
+    sprite_voxel.setTexture(one_voxel_picture.getTexture());
+    sprite_voxel.setTextureRect(surface_coverage);
     //one_voxel_picture.Draw(sf::Shape::Line(min_x,min_y, max_x, max_y, 1, sf::Color::Blue));
     //one_voxel_picture.Draw(sf::Shape::Line(max_x-2,max_y+2, max_x+2, max_y-2, 1, sf::Color::Green));
     //one_voxel_picture.Draw(sf::Shape::Line(min_x-2,min_y+2, min_x+2, min_y-2, 1, sf::Color::Blue));
@@ -178,11 +178,11 @@ void Graph_SFML::create_one_voxel_picture(Pt3d &M_000_c,Pt3d &vect_vox_x_c,Pt3d 
 
 void Graph_SFML::draw_1_voxel(int x,int y,unsigned short r,unsigned short g,unsigned short b,unsigned short a)
 {
-    int position_x=512-(SUB_PICTURE_SIZE>>1)+surface_coverage.Left+x;
-    int position_y=384-(SUB_PICTURE_SIZE>>1)+surface_coverage.Top+y;
+    int position_x=512-(SUB_PICTURE_SIZE>>1)+surface_coverage.left+x;
+    int position_y=384-(SUB_PICTURE_SIZE>>1)+surface_coverage.top+y;
 
-    sprite_voxel.SetPosition(position_x,position_y);
-    sprite_voxel.SetColor(sf::Color(r,g,b,a));
-    App.Draw(sprite_voxel);
+    sprite_voxel.setPosition(position_x,position_y);
+    sprite_voxel.setColor(sf::Color(r,g,b,a));
+    App.draw(sprite_voxel);
 }
     
