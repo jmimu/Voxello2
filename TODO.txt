@@ -1,1 +1,7 @@
 Use SDL + OpenGL to simplify compilation
+
+add a "background" class, containing a big voximage compressed with RLE. Choose which part to show
+
+make a Scene constructor that copies size of "reference" voximg
+
+For ply, ask for one size. Compute the other with actual ply size.

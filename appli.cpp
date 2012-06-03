@@ -22,8 +22,8 @@ int main(int argc, char *argv[])
     Graph *graph=new Graph_SFML();
     graph->init();
     
-    VoxImg test("data/perso_stand.vox",0,VOX_FILE);
-    test.load_from_ply("data/NuageImProf_LeChantier_Etape_5.ply",50,50,50);
+    //VoxImg test("data/perso_stand.vox",0,VOX_FILE);
+    //test.load_from_ply("data/AperiCloud4.ply",50,50,50);
     
     
     
@@ -293,6 +293,7 @@ int main(int argc, char *argv[])
         //scene.blit(subber);
         scene.blit(perso);
         scene.blit(palet);
+        //scene.blit(&test,&pos);
         
         //angleZ += 0.00020 * ellapsed_time;
         //angleY += 0.00023 * ellapsed_time;

@@ -26,6 +26,13 @@
 
 #define VOX_FILE 1
 
+
+/*
+ * Some explanations about palette :
+ * 
+ * the shown palette is only the scene one...
+ * */
+
 class VoxImg
 {
 public:
