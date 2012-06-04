@@ -11,10 +11,12 @@ double pseudo_normalize(double x,double ORTHO_ZOOM,double scale)
 }
 
 
-Draw_Vox_Ortho::Draw_Vox_Ortho(Graph* graph,VoxImg* obj):m_graph(graph),m_obj(obj),
-    M_000_v(0,0,0),M_100_v(1,0,0),M_010_v(0,1,0),M_001_v(0,0,1),
-    M_000_c(),M_100_c(),M_010_c(),M_001_c(),rotation_center_v(m_obj->get_xsiz()>>1,m_obj->get_ysiz()>>1,m_obj->get_zsiz()>>1),
+Draw_Vox_Ortho::Draw_Vox_Ortho(Graph* graph,VoxImg* obj):
     vect_vox_x_c(),vect_vox_y_c(),vect_vox_z_c(),
+    m_graph(graph),m_obj(obj),
+    M_000_v(0,0,0),M_100_v(1,0,0),M_010_v(0,1,0),M_001_v(0,0,1),
+    M_000_c(),M_100_c(),M_010_c(),M_001_c(),
+    rotation_center_v(m_obj->get_xsiz()>>1,m_obj->get_ysiz()>>1,m_obj->get_zsiz()>>1),
     CamRot_c2v(),CamPos_c(0,0,-10)
 {
 }
@@ -152,7 +154,11 @@ void Draw_Vox_Ortho::draw_voxels()
     axis_end_times_axis_dir[1]=axis_end[1]*axis_dir[1];
     axis_end_times_axis_dir[2]=axis_end[2]*axis_dir[2];
 
+#ifdef VOX_24BIT
+    unsigned int v;//value of current voxel
+#else
     unsigned char v;//value of current voxel
+#endif
     bool hidden;
     long obj_i=0;
     long obj_i_diff_X=axis_dir[0]*m_obj->get_yzsiz();//what to add to get neighbors in the 3 directions (for NEIGH_OPTIMIZATION)
@@ -209,7 +215,12 @@ void Draw_Vox_Ortho::draw_voxels()
                     dark=(-position_z+ORTHO_ZOOM_times_LIGHT_DIST)*inv_ORTHO_ZOOM_times_LIGHT_DIST;
                     alpha=255;
                 }
+#ifdef VOX_24BIT
+
+                m_graph->draw_1_voxel(position_x,position_y,(v>>16)/dark,((v>>8)&0xFF)/dark,((v)&0xFF)/dark,alpha);
+#else
                 m_graph->draw_1_voxel(position_x,position_y,m_obj->palette[v][0]/dark,m_obj->palette[v][1]/dark,m_obj->palette[v][1]/dark,alpha);
+#endif
                 obj_i++;
             }
         }

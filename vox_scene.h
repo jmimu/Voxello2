@@ -28,6 +28,7 @@ class Particle_Manager;
 class Vox_Scene : public VoxImg
 {
 public:
+    Vox_Scene(VoxImg & model);//get palette and size from this VoxImg
     Vox_Scene(int _xsiz, int _ysiz, int _zsiz, VoxImg & palette_model);//get palette from this VoxImg
     virtual ~Vox_Scene();
     void init();

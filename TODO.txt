@@ -1,4 +1,12 @@
+Why bug then size too big ?
+
+Impoze palette for ply : RRGGGBBB
+
+use long for sizes
+
 Use SDL + OpenGL to simplify compilation
+
+use in osmose
 
 add a "background" class, containing a big voximage compressed with RLE. Choose which part to show
 

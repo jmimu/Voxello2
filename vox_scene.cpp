@@ -5,6 +5,30 @@
 
 #include "particle_manager.h"
 
+//get palette and size from this VoxImg
+Vox_Scene::Vox_Scene(VoxImg & model)
+{
+    xsiz=model.get_xsiz();
+    ysiz=model.get_ysiz();
+    zsiz=model.get_zsiz();
+
+    xyzsiz=xsiz*ysiz*zsiz;
+    yzsiz=ysiz*zsiz;
+
+#ifdef VOX_24BIT
+    voxels = (unsigned int *)malloc(xyzsiz*sizeof(unsigned int));
+#else
+    voxels = (unsigned char *)malloc(xyzsiz*sizeof(unsigned char));
+#endif
+    for (int i=0;i<255;i++)
+    {
+        palette[i][0]=model.palette[i][0];
+        palette[i][1]=model.palette[i][1];
+        palette[i][2]=model.palette[i][2];
+    }
+}
+
+
 //get palette from this VoxSpr
 Vox_Scene::Vox_Scene(int _xsiz, int _ysiz, int _zsiz, VoxImg & palette_model) : VoxImg()
 {
@@ -15,7 +39,11 @@ Vox_Scene::Vox_Scene(int _xsiz, int _ysiz, int _zsiz, VoxImg & palette_model) : 
     xyzsiz=xsiz*ysiz*zsiz;
     yzsiz=ysiz*zsiz;
 
+#ifdef VOX_24BIT
+    voxels = (unsigned int *)malloc(xyzsiz*sizeof(unsigned int));
+#else
     voxels = (unsigned char *)malloc(xyzsiz*sizeof(unsigned char));
+#endif
     for (int i=0;i<255;i++)
     {
         palette[i][0]=palette_model.palette[i][0];
@@ -26,7 +54,7 @@ Vox_Scene::Vox_Scene(int _xsiz, int _ysiz, int _zsiz, VoxImg & palette_model) : 
 
 Vox_Scene::~Vox_Scene()
 {
-    if (Particle_Manager::the_one->get_scene()==this)
+    if ((Particle_Manager::the_one) and (Particle_Manager::the_one->get_scene()==this))
         delete Particle_Manager::the_one;
 }
 
@@ -387,8 +415,16 @@ bool Vox_Scene::reinit(VoxImg & obj)
         std::cout<<"Error, not same voxel size in Vox_Scene::reinit\n";
         return false;
     }
+
+#ifdef VOX_24BIT
+    unsigned int * vox_src=obj.voxels;
+    unsigned int * vox_dest=voxels;
+#else
     unsigned char * vox_src=obj.voxels;
     unsigned char * vox_dest=voxels;
+#endif
+
+
     for (long i=0;i<xyzsiz;i++)
     {
         (*vox_dest)=(*vox_src);

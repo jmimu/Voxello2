@@ -61,8 +61,14 @@ bool VoxImg::load_from_VOX (std::string filnam,int direction)
 
     std::cout<<filnam<<": got "<<xsiz_tmp<<"*"<<ysiz_tmp<<"*"<<zsiz_tmp<<" voxels_tmp"<<std::endl;
 
+#ifdef VOX_24BIT
+    unsigned int *voxels_tmp = (unsigned int *)malloc(xsiz_tmp*ysiz_tmp*zsiz_tmp*sizeof(unsigned int));//before rotation
+    voxels = (unsigned int *)malloc(xsiz_tmp*ysiz_tmp*zsiz_tmp*sizeof(unsigned int));
+#else
     unsigned char *voxels_tmp = (unsigned char *)malloc(xsiz_tmp*ysiz_tmp*zsiz_tmp*sizeof(unsigned char));//before rotation
     voxels = (unsigned char *)malloc(xsiz_tmp*ysiz_tmp*zsiz_tmp*sizeof(unsigned char));
+#endif
+
     if (!voxels_tmp)
         std::cout<<"Error voxels_tmp"<<std::endl;
     if (!voxels)
@@ -204,12 +210,12 @@ static int nverts;
 static Vertex **vlist;
 
 PlyProperty vert_props[] = { /* list of property information for a vertex */
-  {"x", Float32, Float32, offsetof(Vertex,x), 0, 0, 0, 0},
-  {"y", Float32, Float32, offsetof(Vertex,y), 0, 0, 0, 0},
-  {"z", Float32, Float32, offsetof(Vertex,z), 0, 0, 0, 0},
-  {"red", Float32, Float32, offsetof(Vertex,r), 0, 0, 0, 0},
-  {"green", Float32, Float32, offsetof(Vertex,g), 0, 0, 0, 0},
-  {"blue", Float32, Float32, offsetof(Vertex,b), 0, 0, 0, 0}
+  {(char *)"x", Float32, Float32, offsetof(Vertex,x), 0, 0, 0, 0},
+  {(char *)"y", Float32, Float32, offsetof(Vertex,y), 0, 0, 0, 0},
+  {(char *)"z", Float32, Float32, offsetof(Vertex,z), 0, 0, 0, 0},
+  {(char *)"red", Float32, Float32, offsetof(Vertex,r), 0, 0, 0, 0},
+  {(char *)"green", Float32, Float32, offsetof(Vertex,g), 0, 0, 0, 0},
+  {(char *)"blue", Float32, Float32, offsetof(Vertex,b), 0, 0, 0, 0}
 };
 
 bool VoxImg::load_from_ply (std::string filnam,unsigned short _xsiz, unsigned short _ysiz, unsigned short _zsiz)///create voximg from a ply point cloud
@@ -220,14 +226,28 @@ bool VoxImg::load_from_ply (std::string filnam,unsigned short _xsiz, unsigned sh
     zsiz=_zsiz;
     xyzsiz=xsiz*ysiz*zsiz;
     yzsiz=ysiz*zsiz;
-    
+
+#ifdef VOX_24BIT
+    voxels = (unsigned int *)malloc(xyzsiz*sizeof(unsigned int));
+#else
     voxels = (unsigned char *)malloc(xyzsiz*sizeof(unsigned char));
+#endif
+    
 
     for (int i=0;i<255;i++)
     {
-        palette[i][0]=i;
-        palette[i][1]=i;
-        palette[i][2]=i;
+#ifdef PALETTE_RRGGGBBB
+        //colors : RRGGGBBB
+        palette[i][0]=i&192;
+        palette[i][1]=((i>>3)&7)<<5;
+        palette[i][2]=(i&7)<<5;
+#endif
+#ifdef PALETTE_RRRGGGBB
+        //colors : RRRGGGBB
+        palette[i][0]=i&224;
+        palette[i][1]=((i>>2)&7)<<5;
+        palette[i][2]=(i&3)<<6;
+#endif
     }
         /*palette[1][0]=0;
         palette[1][1]=0;
@@ -248,14 +268,14 @@ bool VoxImg::load_from_ply (std::string filnam,unsigned short _xsiz, unsigned sh
     {
       char * elem_name = setup_element_read_ply (ply, i, &elem_count);
       //std::cout<<"nb elements: "<<elem_count<<std::endl;
-      if (equal_strings ("vertex", elem_name)) 
+      if (equal_strings ((char *)"vertex", elem_name))
       {
           /*
             Create a vertex list to hold all the vertices.
           */
           vlist = (Vertex **) malloc (sizeof (Vertex *) * elem_count);
           nverts = elem_count;
-          std::cout<<"nb verts: "<<nverts<<std::endl;
+          std::cout<<"Nb verts: "<<nverts<<". Reading file..."<<std::endl;
           setup_property_ply (ply, &vert_props[0]);
           setup_property_ply (ply, &vert_props[1]);
           setup_property_ply (ply, &vert_props[2]);
@@ -263,11 +283,11 @@ bool VoxImg::load_from_ply (std::string filnam,unsigned short _xsiz, unsigned sh
           {
             PlyProperty *prop;
             prop = ply->elems[i]->props[j];
-            if (equal_strings ("red", prop->name))
+            if (equal_strings ((char *)"red", prop->name))
               setup_property_ply (ply, &vert_props[3]);
-            if (equal_strings ("green", prop->name))
+            if (equal_strings ((char *)"green", prop->name))
               setup_property_ply (ply, &vert_props[4]);
-            if (equal_strings ("blue", prop->name))
+            if (equal_strings ((char *)"blue", prop->name))
               setup_property_ply (ply, &vert_props[5]);
           }
           for (j = 0; j < elem_count; j++) {
@@ -284,6 +304,8 @@ bool VoxImg::load_from_ply (std::string filnam,unsigned short _xsiz, unsigned sh
     close_ply (ply);
     free_ply (ply);
     
+    std::cout<<"Calculate model size..."<<std::endl;
+
     //empty voxels
     for (long i=0;i<xyzsiz;i++)
       voxels[i]=255;
@@ -302,17 +324,44 @@ bool VoxImg::load_from_ply (std::string filnam,unsigned short _xsiz, unsigned sh
         if (vlist[j]->z > z_max) z_max=vlist[j]->z;
         if (vlist[j]->z < z_min) z_min=vlist[j]->z;
     }
-    
+
+    std::cout<<"Voxelization..."<<std::endl;
+#ifdef VOX_24BIT
+    unsigned int v;
+#else
     unsigned char v;
+#endif
     long x,y,z;
+    float x_maxmin=x_max-x_min+0.00001;
+    float y_maxmin=y_max-y_min+0.00001;
+    float z_maxmin=z_max-z_min+0.00001;
     //for each point modify a voxel
     for (j = 0; j < nverts; j++) {
         //std::cout<<vlist[j]->x<<" "<<vlist[j]->y<<" "<<vlist[j]->z<<" "<<vlist[j]->r<<" "<<vlist[j]->g<<" "<<vlist[j]->b<<"\n";
-        x=xsiz*(vlist[j]->x-x_min)/(x_max-x_min);
-        y=ysiz*(vlist[j]->y-y_min)/(y_max-y_min);
-        z=zsiz*(vlist[j]->z-z_min)/(z_max-z_min);
-        v=(vlist[j]->r+vlist[j]->g+vlist[j]->b)/(3);
+        x=xsiz*(vlist[j]->x-x_min)/x_maxmin;
+        y=ysiz*(vlist[j]->y-y_min)/y_maxmin;
+        z=zsiz*(vlist[j]->z-z_min)/z_maxmin;
+        //std::cout<<"vox "<<x<<" "<<y<<" "<<z<<"... "<<std::flush;
+
+
+
+#ifdef VOX_24BIT
+            v=((unsigned short)vlist[j]->r)<<16+((unsigned short)vlist[j]->g)<<8+((unsigned short)vlist[j]->b);
+            std::cout<<v<<" ";
+#else
+    #ifdef PALETTE_RRGGGBBB
+            //colors RRGGGBBB
+            v=(((unsigned short)vlist[j]->r)&192)+((((unsigned short)vlist[j]->g)>>2)&56)+(((unsigned short)vlist[j]->b)>>5);
+    #endif
+    #ifdef PALETTE_RRRGGGBB
+            //colors RRGGGGBB
+            v=(((unsigned short)vlist[j]->r)&224)+((((unsigned short)vlist[j]->g)>>3)&28)+(((unsigned short)vlist[j]->b)>>6);
+    #endif
+#endif
+
+
         voxels[x*yzsiz+y*zsiz+z]=v;
+        //std::cout<<"done!"<<std::endl;
     }
     
     std::cout<<"load_from_ply OK--------------------------------------------------"<<std::endl;

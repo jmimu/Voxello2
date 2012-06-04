@@ -22,8 +22,10 @@ int main(int argc, char *argv[])
     graph->init();
     
     VoxImg test("data/perso_stand.vox",0,VOX_FILE);
-    test.load_from_ply("data/NuageImProf_LeChantier_Etape_5.ply",150,110,40);
-    Vox_Scene scene(150,110,40,test);
+    test.load_from_ply("data/AperiCloud4.ply",50,50,30);
+    //test.load_from_ply("data/NuageImProf_LeChantier_Etape_5.ply",200,200,100);
+    //test.load_from_ply("data/boudha.ply",100,100,60);
+    Vox_Scene scene(test);
 
     Draw_Vox_Ortho *draw=new Draw_Vox_Ortho(graph,&scene);//maybe create a generic class for otho or perspective
     
@@ -35,6 +37,9 @@ int main(int argc, char *argv[])
     sf::Clock clock;
     unsigned long last_time = clock.getElapsedTime().asMilliseconds();
     unsigned long current_time,ellapsed_time,start_time;
+    current_time = clock.getElapsedTime().asMilliseconds();
+    start_time=current_time;
+
     unsigned long previous_fps_time=clock.getElapsedTime().asMilliseconds()/1000;
     int fps=0;
 

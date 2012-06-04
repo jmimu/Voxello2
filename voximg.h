@@ -3,6 +3,7 @@
 
 #include <string>
 #include "pt3d.h"
+#include "compil.h"
 
 /**
   Object's frame of reference
@@ -27,6 +28,7 @@
 #define VOX_FILE 1
 
 
+
 /*
  * Some explanations about palette :
  * 
@@ -42,7 +44,11 @@ public:
     //load form voxlap file
     bool load_from_VOX (std::string filnam,int direction=EAST);///load Ken Silverman's Voxlap5 VOX format
     bool load_from_ply (std::string filnam,unsigned short _xsiz, unsigned short _ysiz, unsigned short _zsiz);///create voximg from a ply point cloud
+#ifdef VOX_24BIT
+    unsigned int *voxels;
+#else
     unsigned char *voxels;
+#endif
     unsigned char palette[256][3];
 
     unsigned short get_xyzsiz(){return xyzsiz;}
