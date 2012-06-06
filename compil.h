@@ -5,7 +5,7 @@
 #define PALETTE_RRGGGBBB
 //#define PALETTE_RRRGGGBB
 
-#define VOX_24BIT
+//#define VOX_24BIT
 
 
 #endif // COMPIL_H

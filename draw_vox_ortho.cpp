@@ -216,8 +216,9 @@ void Draw_Vox_Ortho::draw_voxels()
                     alpha=255;
                 }
 #ifdef VOX_24BIT
-
-                m_graph->draw_1_voxel(position_x,position_y,(v>>16)/dark,((v>>8)&0xFF)/dark,((v)&0xFF)/dark,alpha);
+                //std::cout<<"draw "<<v<<" => "<<((v>>16)&0xFF)<<" "<<((v>>8)&0xFF)<<" "<<((v>>0)&0xFF)<<"\n";
+                m_graph->draw_1_voxel(position_x,position_y,((v>>16)&0xFF)/dark,((v>>8)&0xFF)/dark,((v>>0)&0xFF)/dark,alpha);
+                //m_graph->draw_1_voxel(position_x,position_y,200,200,200,255);
 #else
                 m_graph->draw_1_voxel(position_x,position_y,m_obj->palette[v][0]/dark,m_obj->palette[v][1]/dark,m_obj->palette[v][1]/dark,alpha);
 #endif

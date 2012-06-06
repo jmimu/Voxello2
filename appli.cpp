@@ -54,7 +54,9 @@ int main(int argc, char *argv[])
 
     VoxImg img_palet("data/palet2.vox",VOX_FILE);
     VoxImg img_subber("data/subber.vox",VOX_FILE);//mask to remove snow when picking
+    std::cout<<"Create scene\n";
     Vox_Scene scene(120,100,50,img_palet);
+    std::cout<<"Create ground\n";
     Vox_Scene ground(120,100,50,img_palet);
     VoxSpr perso(walk_anim[direction].at(anim_index));
     VoxSpr palet(&img_palet);
@@ -223,7 +225,11 @@ int main(int argc, char *argv[])
             Pt3d snow(rand()%scene.xsiz,rand()%scene.ysiz,0);
             Pt3d snow_speed(0,0,1);
             //if (int(t*20)%10==0)
-                Particle_Manager::the_one->add_particle(31,snow,snow_speed,0);
+#ifdef VOX_24BIT
+                Particle_Manager::the_one->add_particle(200+rand()%50,snow,snow_speed,0);
+#else
+                Particle_Manager::the_one->add_particle(28+rand()%4,snow,snow_speed,0);
+#endif
         }
 
         Snowball::update_snowballs();

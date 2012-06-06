@@ -13,3 +13,11 @@ add a "background" class, containing a big voximage compressed with RLE. Choose 
 make a Scene constructor that copies size of "reference" voximg
 
 For ply, ask for one size. Compute the other with actual ply size.
+
+
+
+------------------------------------- game:
+
+add a fixed hitbox for perso.
+why is snowball black in 24bpv mode ?
+maybe use 4th byte (unused) for nature of voxel (snow, for sub...).

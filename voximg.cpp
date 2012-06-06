@@ -58,15 +58,17 @@ bool VoxImg::load_from_VOX (std::string filnam,int direction)
     xsiz_tmp=xsiz;
     ysiz_tmp=ysiz;
     zsiz_tmp=zsiz;
+    xyzsiz=xsiz*ysiz*zsiz;
 
     std::cout<<filnam<<": got "<<xsiz_tmp<<"*"<<ysiz_tmp<<"*"<<zsiz_tmp<<" voxels_tmp"<<std::endl;
 
 #ifdef VOX_24BIT
-    unsigned int *voxels_tmp = (unsigned int *)malloc(xsiz_tmp*ysiz_tmp*zsiz_tmp*sizeof(unsigned int));//before rotation
-    voxels = (unsigned int *)malloc(xsiz_tmp*ysiz_tmp*zsiz_tmp*sizeof(unsigned int));
+    unsigned char *voxels_tmp_8b = (unsigned char *)malloc(xyzsiz*sizeof(unsigned char));//before rotation, 8bit (like in the file)
+    unsigned int *voxels_tmp = (unsigned int *)malloc(xyzsiz*sizeof(unsigned int));//before rotation
+    voxels = (unsigned int *)malloc(xyzsiz*sizeof(unsigned int));
 #else
-    unsigned char *voxels_tmp = (unsigned char *)malloc(xsiz_tmp*ysiz_tmp*zsiz_tmp*sizeof(unsigned char));//before rotation
-    voxels = (unsigned char *)malloc(xsiz_tmp*ysiz_tmp*zsiz_tmp*sizeof(unsigned char));
+    unsigned char *voxels_tmp = (unsigned char *)malloc(xyzsiz*sizeof(unsigned char));//before rotation
+    voxels = (unsigned char *)malloc(xyzsiz*sizeof(unsigned char));
 #endif
 
     if (!voxels_tmp)
@@ -74,7 +76,11 @@ bool VoxImg::load_from_VOX (std::string filnam,int direction)
     if (!voxels)
         std::cout<<"Error voxels"<<std::endl;
 
-    fread(voxels_tmp,xsiz_tmp*ysiz_tmp*zsiz_tmp,1,fil); //The 3-D array itself!
+#ifdef VOX_24BIT
+    fread(voxels_tmp_8b,xyzsiz,1,fil); //The 3-D array itself!
+#else
+    fread(voxels_tmp,xyzsiz,1,fil); //The 3-D array itself!
+#endif
 
     fread(palette,768,1,fil);          //VGA palette (values range from 0-63)
     fclose(fil);
@@ -102,6 +108,16 @@ bool VoxImg::load_from_VOX (std::string filnam,int direction)
         ysiz=xsiz_tmp;
     }
     zsiz=zsiz_tmp;
+    
+#ifdef VOX_24BIT
+    for (long i=0;i<xyzsiz;i++)
+    {
+        if (voxels_tmp_8b[i]!=0xff)
+            voxels_tmp[i]=(((unsigned int)palette[voxels_tmp_8b[i]][0])<<16)+(((unsigned int)palette[voxels_tmp_8b[i]][1])<<8)+(((unsigned int)palette[voxels_tmp_8b[i]][2])<<0);
+        else voxels_tmp[i]=0xff;
+        //voxels_tmp[i]=(((unsigned int)palette[voxels_tmp_8b[i]][0])<<16);
+    }
+#endif
 
     std::cout<<"direction "<<direction<<std::endl;
     x=0;y=0;z=0;
@@ -165,10 +181,11 @@ bool VoxImg::load_from_VOX (std::string filnam,int direction)
             y=0;
         }
     }*/
-
+#ifdef VOX_24BIT
+    free(voxels_tmp_8b);
+#endif
     free(voxels_tmp);
 
-    xyzsiz=xsiz*ysiz*zsiz;
     yzsiz=ysiz*zsiz;
 
     std::cout<<filnam<<": got "<<xsiz<<"*"<<ysiz<<"*"<<zsiz<<" voxels"<<std::endl;
@@ -340,22 +357,24 @@ bool VoxImg::load_from_ply (std::string filnam,unsigned short _xsiz, unsigned sh
         //std::cout<<vlist[j]->x<<" "<<vlist[j]->y<<" "<<vlist[j]->z<<" "<<vlist[j]->r<<" "<<vlist[j]->g<<" "<<vlist[j]->b<<"\n";
         x=xsiz*(vlist[j]->x-x_min)/x_maxmin;
         y=ysiz*(vlist[j]->y-y_min)/y_maxmin;
-        z=zsiz*(vlist[j]->z-z_min)/z_maxmin;
+        z=zsiz-zsiz*(vlist[j]->z-z_min)/z_maxmin-1;
         //std::cout<<"vox "<<x<<" "<<y<<" "<<z<<"... "<<std::flush;
 
 
 
 #ifdef VOX_24BIT
-            v=((unsigned short)vlist[j]->r)<<16+((unsigned short)vlist[j]->g)<<8+((unsigned short)vlist[j]->b);
-            std::cout<<v<<" ";
+        //v=((unsigned int)vlist[j]->r)<<16+((unsigned int)vlist[j]->g)<<8+((unsigned int)vlist[j]->b);
+        v=(((unsigned int)vlist[j]->r)<<16)+(((unsigned int)vlist[j]->g)<<8)+(((unsigned int)vlist[j]->b));
+        //std::cout<<"to draw "<<((unsigned int)vlist[j]->r)<<" "<<((unsigned int)vlist[j]->g)<<" "<<((unsigned int)vlist[j]->b)<<" => "<<v<<"\n";
+            //std::cout<<v<<" ";
 #else
     #ifdef PALETTE_RRGGGBBB
             //colors RRGGGBBB
-            v=(((unsigned short)vlist[j]->r)&192)+((((unsigned short)vlist[j]->g)>>2)&56)+(((unsigned short)vlist[j]->b)>>5);
+            v=(((unsigned int)vlist[j]->r)&192)+((((unsigned int)vlist[j]->g)>>2)&56)+(((unsigned int)vlist[j]->b)>>5);
     #endif
     #ifdef PALETTE_RRRGGGBB
             //colors RRGGGGBB
-            v=(((unsigned short)vlist[j]->r)&224)+((((unsigned short)vlist[j]->g)>>3)&28)+(((unsigned short)vlist[j]->b)>>6);
+            v=(((unsigned int)vlist[j]->r)&224)+((((unsigned int)vlist[j]->g)>>3)&28)+(((unsigned int)vlist[j]->b)>>6);
     #endif
 #endif
 

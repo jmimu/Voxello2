@@ -25,6 +25,7 @@ Vox_Scene::Vox_Scene(VoxImg & model)
         palette[i][0]=model.palette[i][0];
         palette[i][1]=model.palette[i][1];
         palette[i][2]=model.palette[i][2];
+        //std::cout<<"Scene palette: "<<(int)palette[i][0]<<" "<<(int)palette[i][1]<<" "<<(int)palette[i][2]<<"\n";
     }
 }
 
@@ -49,6 +50,7 @@ Vox_Scene::Vox_Scene(int _xsiz, int _ysiz, int _zsiz, VoxImg & palette_model) : 
         palette[i][0]=palette_model.palette[i][0];
         palette[i][1]=palette_model.palette[i][1];
         palette[i][2]=palette_model.palette[i][2];
+        //std::cout<<"Scene palette: "<<(int)palette[i][0]<<" "<<(int)palette[i][1]<<" "<<(int)palette[i][2]<<"\n";
     }
 }
 
@@ -116,7 +118,14 @@ void Vox_Scene::init()
         }
     }
     
-    
+#ifdef VOX_24BIT
+    for (long i=0;i<xyzsiz;i++)
+    {
+        //std::cout<<"scene: "<<voxels[i]<<"\n";
+        if (voxels[i]!=0xff)
+          voxels[i]=(((unsigned int)palette[voxels[i]][0])<<16)+(((unsigned int)palette[voxels[i]][1])<<8)+(((unsigned int)palette[voxels[i]][2])<<0);
+    }
+#endif
 }
 
 void Vox_Scene::blit(VoxSpr & spr)

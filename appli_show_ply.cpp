@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     graph->init();
     
     VoxImg test("data/perso_stand.vox",0,VOX_FILE);
-    test.load_from_ply("data/AperiCloud4.ply",50,50,30);
+    test.load_from_ply("data/AperiCloud4.ply",80,80,60);
     //test.load_from_ply("data/NuageImProf_LeChantier_Etape_5.ply",200,200,100);
     //test.load_from_ply("data/boudha.ply",100,100,60);
     Vox_Scene scene(test);

@@ -18,6 +18,10 @@ Vox_Particle::Vox_Particle(unsigned char color, Pt3d pos, Pt3d velocity,bool acc
     m_img->voxels[0]=color;
     set_pos(pos);
     //std::cout<<"New Particle: "<<pos.x<<" "<<pos.y<<" "<<pos.z<<": "<<m_velocity.z<<std::endl;
+
+#ifdef VOX_24BIT
+    m_img->voxels[0]=(((unsigned int)color)<<16)+(((unsigned int)color)<<8)+(((unsigned int)color)<<0);
+#endif
 }
 
 
