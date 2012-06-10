@@ -15,7 +15,7 @@ class Graph_SDL : public Graph
         virtual void init();
         virtual void line(int x1,int y1,int x2,int y2,unsigned short r,unsigned short g,unsigned short b);
         virtual void quad(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,unsigned short r,unsigned short g,unsigned short b);
-        virtual void quad(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,unsigned short v);
+        virtual void quad(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,unsigned int v);
         virtual void close();
         virtual void start_frame();
         virtual void end_frame();

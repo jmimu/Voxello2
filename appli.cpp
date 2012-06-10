@@ -114,12 +114,13 @@ int main(int argc, char *argv[])
             }
             if (event.type == sf::Event::MouseMoved)
             {
-                angleZ = event.mouseMove.x*0.01;
+                //angleZ = event.mouseMove.x*0.01;
+                angleY = event.mouseMove.x*0.01;
                 angleX = 3.14+event.mouseMove.y*0.01;
             }
             if (event.type == sf::Event::MouseWheelMoved)
             {
-                graph->ORTHO_ZOOM+=event.mouseWheel.delta/10.0;
+                graph->zoom_change(event.mouseWheel.delta/10.0);
             }
         }
         

@@ -17,6 +17,11 @@ void Graph_SFML::init()
     sprite_voxel.setTexture(one_voxel_picture.getTexture());
 }
 
+void Graph_SFML::zoom_change(float delta)
+{
+    ORTHO_ZOOM+=delta;
+}
+
 void Graph_SFML::start_frame()
 {
     App.clear();
@@ -35,7 +40,7 @@ void Graph_SFML::line(int x1,int y1,int x2,int y2,unsigned short r,unsigned shor
     //App.Draw(sf::Shape::Line(x1, y1, x2, y2, 1, sf::Color::Red));
 }
 
-void Graph_SFML::quad(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,unsigned short v)
+void Graph_SFML::quad(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,unsigned int v)
 {
     quad(x1,y1,x2,y2,x3,y3,x4,y4,v,v,v);
 }

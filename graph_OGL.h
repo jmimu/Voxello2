@@ -1,15 +1,18 @@
-#ifndef GRAPH_SFML_H
-#define GRAPH_SFML_H
+#ifndef GRAPH_OGL_H
+#define GRAPH_OGL_H
 
 #include "graph.h"
-#include <SFML/Graphics.hpp>
+#include <SDL/SDL.h>
+#include <SDL/SDL_gfxPrimitives.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 #define FPS 30
 
-class Graph_SFML : public Graph
+class Graph_OGL : public Graph
 {
     public:
-        Graph_SFML();
+        Graph_OGL();
         virtual void init();
         virtual void line(int x1,int y1,int x2,int y2,unsigned short r,unsigned short g,unsigned short b);
         virtual void quad(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,unsigned short r,unsigned short g,unsigned short b);
@@ -20,15 +23,17 @@ class Graph_SFML : public Graph
         virtual void create_one_voxel_picture(Pt3d &M_000_c,Pt3d &vect_vox_x_c,Pt3d &vect_vox_y_c,Pt3d &vect_vox_z_c);//draw on a other buffer, not screen
         virtual void draw_1_voxel(int x,int y,unsigned short r,unsigned short g,unsigned short b,unsigned short a);//paste image on the screen, coords are relative to screen center
         virtual void zoom_change(float delta);
-        sf::RenderWindow * getWindow(){return &App;};
-
+        SDL_Surface * create_gl_surf(int width,int height);//create a SDL surface with OGP texture format
+        GLuint glsurf2Texture(SDL_Surface * gl_surface,GLuint texture_ID);
+        void clear_alpha_surf(SDL_Surface * surf);
+        void dessineRectangle(double x,double y, double largeur,double hauteur,unsigned short r,unsigned short g,unsigned short b);
     private:
-        sf::RenderWindow App;
+        int picture_size;//must be 2^x
+        SDL_Surface *screen;
         //about voxel rendering
-        sf::RenderTexture one_voxel_picture;
-        sf::Sprite sprite_voxel;
-        sf::IntRect surface_coverage;//area to copy Sprite.SetSubRect(sf::IntRect(10, 10, 20, 20));
+        GLuint texture1;
+        SDL_Surface * one_voxel_picture;//a big surface where I draw a voxel, to be repetited
 
 };
 
-#endif // GRAPH_SFML_H
+#endif // GRAPH_OGL_H

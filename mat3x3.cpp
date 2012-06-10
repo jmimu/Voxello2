@@ -35,7 +35,7 @@ Mat3x3 Mat3x3::matrice_rot(double angle_X,double angle_Y,double angle_Z)
     Rx.matr[1][0]= 0; Rx.matr[1][1]= cos(angle_X); Rx.matr[1][2]=-sin(angle_X);
     Rx.matr[2][0]= 0; Rx.matr[2][1]= sin(angle_X); Rx.matr[2][2]= cos(angle_X);
     Mat3x3 Ry;
-    Ry.matr[0][0]= cos(angle_Y); Ry.matr[0][1]= 0; Ry.matr[0][2]=-sin(angle_Y);
+    Ry.matr[0][0]= cos(angle_Y); Ry.matr[0][1]= 0; Ry.matr[0][2]=sin(angle_Y);
     Ry.matr[1][0]=            0; Ry.matr[1][1]= 1; Ry.matr[1][2]=            0;
     Ry.matr[2][0]=-sin(angle_Y); Ry.matr[2][1]= 0; Ry.matr[2][2]= cos(angle_Y);
     Mat3x3 Rz;
