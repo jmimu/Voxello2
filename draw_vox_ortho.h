@@ -18,7 +18,7 @@
 */
 
 #define NEIGH_OPTIMIZATION
-#define LIGHT_DIST 200.0
+#define LIGHT_DIST 100.0
 #define ALPHA_DIST 800.0
 
 //normalize

@@ -10,6 +10,7 @@ TEMPLATE = app
 SOURCES += appli_OGL.cpp \
     voximg.cpp \
     voxspr.cpp \
+    snowball.cpp \
     vox_scene.cpp \
     vox_particle.cpp \
     particle_manager.cpp \
@@ -22,6 +23,7 @@ SOURCES += appli_OGL.cpp \
 HEADERS += \
     voximg.h \
     voxspr.h \
+    snowball.h \
     vox_scene.h \
     vox_particle.h \
     particle_manager.h \

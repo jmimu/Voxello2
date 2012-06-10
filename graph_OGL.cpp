@@ -27,14 +27,16 @@ void Graph_OGL::init()
     
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity( );
-    gluOrtho2D(0,LARGEUR_FENETRE,0,HAUTEUR_FENETRE);
+    //gluOrtho2D(0,LARGEUR_FENETRE,0,HAUTEUR_FENETRE);
+    gluOrtho2D(0,LARGEUR_FENETRE,HAUTEUR_FENETRE,0);
     glEnable(GL_TEXTURE_2D);
     
     //for alpha
     glEnable(GL_BLEND) ;
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) ; 
     //clear color
-    glClearColor(0.2,0.2,0.5,1);
+    //glClearColor(0.2,0.2,0.5,1);
+    glClearColor(0,0,0,1);
 
     //zoom_change(0);//to create one_voxel_picture
     one_voxel_picture_big=create_gl_surf(picture_size*oversampling, picture_size*oversampling);
@@ -127,24 +129,26 @@ void Graph_OGL::quad(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,uns
 
 void Graph_OGL::quad(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,unsigned int c)
 {
-    filledTrigonColor(one_voxel_picture_big,x1,y1,x2,y2,x3,y3,c);
-    filledTrigonColor(one_voxel_picture_big,x3,y3,x4,y4,x1,y1,c);
+    unsigned int c2=c*0x01010100+0xFF;
+    filledTrigonColor(one_voxel_picture_big,x1,y1,x2,y2,x3,y3,c2);
+    filledTrigonColor(one_voxel_picture_big,x3,y3,x4,y4,x1,y1,c2);
     
-    lineColor(one_voxel_picture_big,x1,y1,x2,y2,0x404040FF);
-    lineColor(one_voxel_picture_big,x1-1,y1,x2-1,y2,0x404040FF);
-    lineColor(one_voxel_picture_big,x1,y1-1,x2,y2-1,0x404040FF);
+    lineColor(one_voxel_picture_big,x1,y1,x2,y2,0x808080FF);
+    lineColor(one_voxel_picture_big,x2,y2,x3,y3,0x808080FF);
+    lineColor(one_voxel_picture_big,x3,y3,x4,y4,0x808080FF);
+    lineColor(one_voxel_picture_big,x4,y4,x1,y1,0x808080FF);
+
+    lineColor(one_voxel_picture_big,x1-1,y1,x2-1,y2,0x808080FF);
+    lineColor(one_voxel_picture_big,x1,y1-1,x2,y2-1,0x808080FF);
     
-    lineColor(one_voxel_picture_big,x2,y2,x3,y3,0x404040FF);
-    lineColor(one_voxel_picture_big,x2-1,y2,x3-1,y3,0x404040FF);
-    lineColor(one_voxel_picture_big,x2,y2-1,x3,y3-1,0x404040FF);
+    lineColor(one_voxel_picture_big,x2-1,y2,x3-1,y3,0x808080FF);
+    lineColor(one_voxel_picture_big,x2,y2-1,x3,y3-1,0x808080FF);
     
-    lineColor(one_voxel_picture_big,x3,y3,x4,y4,0x404040FF);
-    lineColor(one_voxel_picture_big,x3-1,y3,x4-1,y4,0x404040FF);
-    lineColor(one_voxel_picture_big,x3,y3-1,x4,y4-1,0x404040FF);
+    lineColor(one_voxel_picture_big,x3-1,y3,x4-1,y4,0x808080FF);
+    lineColor(one_voxel_picture_big,x3,y3-1,x4,y4-1,0x808080FF);
     
-    lineColor(one_voxel_picture_big,x4,y4,x1,y1,0x404040FF);
-    lineColor(one_voxel_picture_big,x4-1,y4,x1-1,y1,0x404040FF);
-    lineColor(one_voxel_picture_big,x4,y4-1,x1,y1-1,0x404040FF);
+    lineColor(one_voxel_picture_big,x4-1,y4,x1-1,y1,0x808080FF);
+    lineColor(one_voxel_picture_big,x4,y4-1,x1,y1-1,0x808080FF);
 }
 
 void Graph_OGL::close()
@@ -215,31 +219,31 @@ void Graph_OGL::create_one_voxel_picture(Pt3d &M_000_c,Pt3d &vect_vox_x_c,Pt3d &
     //face 6 normal = -vect y
 
 
-    /*if (-vect_vox_z_c.z>0)
-        quad(pt0x,pt0y,pt1x,pt1y,pt2x,pt2y,pt3x,pt3y,0xFF+int(0x50*-vect_vox_z_c.z/ORTHO_ZOOM)*0x10101000);
-    if (+vect_vox_z_c.z>0)
-        quad(pt4x,pt4y,pt5x,pt5y,pt6x,pt6y,pt7x,pt7y,0xFF+int(0x50*+vect_vox_z_c.z/ORTHO_ZOOM)*0x10101000);
-    if (+vect_vox_x_c.z>0)
-        quad(pt1x,pt1y,pt2x,pt2y,pt6x,pt6y,pt5x,pt5y,0xFF+int(0x50*+vect_vox_x_c.z/ORTHO_ZOOM)*0x10101000);
-    if (+vect_vox_y_c.z>0)
-        quad(pt2x,pt2y,pt3x,pt3y,pt7x,pt7y,pt6x,pt6y,0xFF+int(0x50*+vect_vox_y_c.z/ORTHO_ZOOM)*0x10101000);
-    if (-vect_vox_x_c.z>0)
-        quad(pt0x,pt0y,pt3x,pt3y,pt7x,pt7y,pt4x,pt4y,0xFF+int(0x50*-vect_vox_x_c.z/ORTHO_ZOOM)*0x10101000);
-    if (-vect_vox_y_c.z>0)
-        quad(pt1x,pt1y,pt0x,pt0y,pt4x,pt4y,pt5x,pt5y,0xFF+int(0x50*-vect_vox_y_c.z/ORTHO_ZOOM)*0x10101000);*/
-
     if (-vect_vox_z_c.z>0)
-        quad(pt0x,pt0y,pt1x,pt1y,pt2x,pt2y,pt3x,pt3y,0x888888FF);
+        quad(pt0x,pt0y,pt1x,pt1y,pt2x,pt2y,pt3x,pt3y,0x7F+0x80*-vect_vox_z_c.z/ORTHO_ZOOM);
     if (+vect_vox_z_c.z>0)
-        quad(pt4x,pt4y,pt5x,pt5y,pt6x,pt6y,pt7x,pt7y,0x888888FF);
+        quad(pt4x,pt4y,pt5x,pt5y,pt6x,pt6y,pt7x,pt7y,0x7F+0x80*+vect_vox_z_c.z/ORTHO_ZOOM);
     if (+vect_vox_x_c.z>0)
-        quad(pt1x,pt1y,pt2x,pt2y,pt6x,pt6y,pt5x,pt5y,0x888888FF);
+        quad(pt1x,pt1y,pt2x,pt2y,pt6x,pt6y,pt5x,pt5y,0x7F+0x80*+vect_vox_x_c.z/ORTHO_ZOOM);
     if (+vect_vox_y_c.z>0)
-        quad(pt2x,pt2y,pt3x,pt3y,pt7x,pt7y,pt6x,pt6y,0x888888FF);
+        quad(pt2x,pt2y,pt3x,pt3y,pt7x,pt7y,pt6x,pt6y,0x7F+0x80*+vect_vox_y_c.z/ORTHO_ZOOM);
     if (-vect_vox_x_c.z>0)
-        quad(pt0x,pt0y,pt3x,pt3y,pt7x,pt7y,pt4x,pt4y,0x888888FF);
+        quad(pt0x,pt0y,pt3x,pt3y,pt7x,pt7y,pt4x,pt4y,0x7F+0x80*-vect_vox_x_c.z/ORTHO_ZOOM);
     if (-vect_vox_y_c.z>0)
-        quad(pt1x,pt1y,pt0x,pt0y,pt4x,pt4y,pt5x,pt5y,0x888888FF);
+        quad(pt1x,pt1y,pt0x,pt0y,pt4x,pt4y,pt5x,pt5y,0x7F+0x80*-vect_vox_y_c.z/ORTHO_ZOOM);
+
+    /*if (-vect_vox_z_c.z>0)
+        quad(pt0x,pt0y,pt1x,pt1y,pt2x,pt2y,pt3x,pt3y,0xFFFFFFFF);
+    if (+vect_vox_z_c.z>0)
+        quad(pt4x,pt4y,pt5x,pt5y,pt6x,pt6y,pt7x,pt7y,0xFFFFFFFF);
+    if (+vect_vox_x_c.z>0)
+        quad(pt1x,pt1y,pt2x,pt2y,pt6x,pt6y,pt5x,pt5y,0xFFFFFFFF);
+    if (+vect_vox_y_c.z>0)
+        quad(pt2x,pt2y,pt3x,pt3y,pt7x,pt7y,pt6x,pt6y,0xFFFFFFFF);
+    if (-vect_vox_x_c.z>0)
+        quad(pt0x,pt0y,pt3x,pt3y,pt7x,pt7y,pt4x,pt4y,0xFFFFFFFF);
+    if (-vect_vox_y_c.z>0)
+        quad(pt1x,pt1y,pt0x,pt0y,pt4x,pt4y,pt5x,pt5y,0xFFFFFFFF);*/
 
     if (one_voxel_picture!=0)
       SDL_FreeSurface(one_voxel_picture);
@@ -247,9 +251,10 @@ void Graph_OGL::create_one_voxel_picture(Pt3d &M_000_c,Pt3d &vect_vox_x_c,Pt3d &
     texture1 = glsurf2Texture(one_voxel_picture,texture1);
 }
 
-void Graph_OGL::dessineRectangle(double x,double y, double largeur,double hauteur,unsigned short r,unsigned short g,unsigned short b)
+void Graph_OGL::dessineRectangle(double x,double y, double largeur,double hauteur,unsigned short r,unsigned short g,unsigned short b,unsigned short a)
 {
     glColor3ub(r,g,b); //la couleur peut etre donnee hors de glBegin, ouf
+    glColor4ub(r,g,b,a); //la couleur peut etre donnee hors de glBegin, ouf
     
     //glBindTexture(GL_TEXTURE_2D, texture1);
     //glPushMatrix();
@@ -270,6 +275,6 @@ void Graph_OGL::dessineRectangle(double x,double y, double largeur,double hauteu
 
 void Graph_OGL::draw_1_voxel(int x,int y,unsigned short r,unsigned short g,unsigned short b,unsigned short a)
 {
-    dessineRectangle(512-(picture_size>>1)+x,384-(picture_size>>1)+y,picture_size,picture_size,r,g,b);
+    dessineRectangle(512-(picture_size>>1)+x,384-(picture_size>>1)+y,picture_size,picture_size,r,g,b,a);
 }
     

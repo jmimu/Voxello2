@@ -27,7 +27,7 @@ class Graph_OGL : public Graph
         SDL_Surface * create_gl_surf(int width,int height);//create a SDL surface with OGP texture format
         GLuint glsurf2Texture(SDL_Surface * gl_surface,GLuint texture_ID);
         void clear_alpha_surf(SDL_Surface * surf);
-        void dessineRectangle(double x,double y, double largeur,double hauteur,unsigned short r,unsigned short g,unsigned short b);
+        void dessineRectangle(double x,double y, double largeur,double hauteur,unsigned short r,unsigned short g,unsigned short b,unsigned short a);
     private:
         int picture_size;//must be 2^x
         SDL_Surface *screen;
