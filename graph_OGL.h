@@ -4,6 +4,7 @@
 #include "graph.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_gfxPrimitives.h>
+#include <SDL/SDL_rotozoom.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 
@@ -32,7 +33,9 @@ class Graph_OGL : public Graph
         SDL_Surface *screen;
         //about voxel rendering
         GLuint texture1;
-        SDL_Surface * one_voxel_picture;//a big surface where I draw a voxel, to be repetited
+        SDL_Surface * one_voxel_picture_big;//a surface where I draw a voxel, to be repetited (with oversampling)
+        SDL_Surface * one_voxel_picture;//reduiced surface
+        double oversampling;
 
 };
 

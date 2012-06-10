@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 
     Pt3d ball_v(1,1,1);
 
-
+    draw->update_camera(100,100,0,angleX,angleY,angleZ);//lasy camera updating...
     bool run=true;
     double t=0.0;
     while (run)
@@ -127,16 +127,19 @@ int main(int argc, char *argv[])
                 case SDL_MOUSEMOTION:
                     angleZ -= event.motion.xrel*0.01;
                     angleX += event.motion.yrel*0.01;
+                    draw->update_camera(100,100,0,angleX,angleY,angleZ);
                 break;
 
                 case SDL_MOUSEBUTTONDOWN:
                     if ((event.button.button == SDL_BUTTON_WHEELUP)&&(event.button.type == SDL_MOUSEBUTTONDOWN))
                     {
                         graph->zoom_change(+0.5);
+                        draw->update_camera(100,100,0,angleX,angleY,angleZ);
                     }
                     if ((event.button.button == SDL_BUTTON_WHEELDOWN)&&(event.button.type == SDL_MOUSEBUTTONDOWN))
                     {
                         graph->zoom_change(-0.5);
+                        draw->update_camera(100,100,0,angleX,angleY,angleZ);
                     }
                     break;
 
@@ -190,7 +193,7 @@ int main(int argc, char *argv[])
         }*/
 
         //drawing
-        draw->update_camera(100,100,0,angleX,angleY,angleZ);
+        //draw->update_camera(100,100,0,angleX,angleY,angleZ);
         draw->render();
 
 

@@ -83,7 +83,7 @@ void Draw_Vox_Ortho::update_camera(double x,double y,double z,double ang_x,doubl
     vect_vox_z_c.y=int(vect_vox_z_c.y);
     vect_vox_z_c.z=int(vect_vox_z_c.z);*/
 
-
+    m_graph->create_one_voxel_picture(M_000_c,vect_vox_x_c,vect_vox_y_c,vect_vox_z_c);
 
 }
 
@@ -118,7 +118,7 @@ void Draw_Vox_Ortho::draw_voxels()
              /|
            2  6
     */
-    m_graph->create_one_voxel_picture(M_000_c,vect_vox_x_c,vect_vox_y_c,vect_vox_z_c);
+    
 
     int position_x=0;
     int position_y=0;

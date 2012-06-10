@@ -20,4 +20,4 @@ For ply, ask for one size. Compute the other with actual ply size.
 
 add a fixed hitbox for perso.
 why is snowball black in 24bpv mode ?
-maybe use 4th byte (unused) for nature of voxel (snow, for sub...).
+maybe use 4th byte (unused) for nature of voxel (snow, for sub...). or for alpha ? (snow flake)

@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 
     Pt3d ball_v(1,0.5,1.2);
 
-
+    draw->update_camera(100,100,0,angleX,angleY,angleZ);//lasy camera updating...
     bool run=true;
     double t=0.0;
     while (((Graph_SFML*)graph)->getWindow()->isOpen() && run)
@@ -117,10 +117,12 @@ int main(int argc, char *argv[])
                 //angleZ = event.mouseMove.x*0.01;
                 angleY = event.mouseMove.x*0.01;
                 angleX = 3.14+event.mouseMove.y*0.01;
+                draw->update_camera(100,100,0,angleX,angleY,angleZ);
             }
             if (event.type == sf::Event::MouseWheelMoved)
             {
                 graph->zoom_change(event.mouseWheel.delta/10.0);
+                draw->update_camera(100,100,0,angleX,angleY,angleZ);
             }
         }
         
@@ -335,7 +337,7 @@ int main(int argc, char *argv[])
         }*/
 
         //drawing
-        draw->update_camera(100,100,0,angleX,angleY,angleZ);
+        //draw->update_camera(100,100,0,angleX,angleY,angleZ);
         draw->render();
 
         
