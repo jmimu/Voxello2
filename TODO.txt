@@ -1,8 +1,8 @@
-Why bug then size too big ?
+delete vlist after ply reading ?
 
-Impoze palette for ply : RRGGGBBB
+add artificial light ?
 
-use long for sizes
+
 
 Use RLE to make drawing faster... (only for empty ?)
 

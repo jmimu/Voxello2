@@ -240,9 +240,17 @@ PlyProperty vert_props[] = { /* list of property information for a vertex */
 ///if only one size is given, it will be used for max dimension. the other will be proportional to model size.
 bool VoxImg::load_from_ply (std::string filnam,unsigned short _xsiz, unsigned short _ysiz, unsigned short _zsiz)///create voximg from a ply point cloud
 {
+    std::vector<std::string> filnames;
+    filnames.push_back(filnam);
+    return load_from_ply (filnames,_xsiz, _ysiz, _zsiz);
+}
+
+bool VoxImg::load_from_ply (std::vector<std::string> filnames,unsigned short _xsiz, unsigned short _ysiz, unsigned short _zsiz)///create voximg from a ply point cloud
+{
     std::cout<<"enter load_from_ply--------------------------------------------------"<<std::endl;
     
-
+    std::vector<Vertex *>vlist_total;
+    
     for (int i=0;i<255;i++)
     {
 #ifdef PALETTE_RRGGGBBB
@@ -264,10 +272,13 @@ bool VoxImg::load_from_ply (std::string filnam,unsigned short _xsiz, unsigned sh
         palette[6][0]=0;
         palette[6][1]=120;
         palette[6][2]=0;*/
-        
+  
+  std::vector<std::string>::iterator filnam_it;
+  for (filnam_it=filnames.begin() ; filnam_it < filnames.end(); filnam_it++)
+  {
     FILE *fil;
     
-    fil = fopen(filnam.c_str(),"rb"); if (!fil) return(false);
+    fil = fopen((*filnam_it).c_str(),"rb"); if (!fil) return(false);
 
     PlyFile * ply;
     ply=read_ply(fil);
@@ -306,30 +317,31 @@ bool VoxImg::load_from_ply (std::string filnam,unsigned short _xsiz, unsigned sh
             vlist[j]->g = 1;
             vlist[j]->b = 1;
             get_element_ply (ply, (void *) vlist[j]);
+            vlist_total.push_back(vlist[j]);
           }
           //std::cout<<std::endl;
       }
     }
     close_ply (ply);
     free_ply (ply);
-    
+  }
     std::cout<<"Calculate model size..."<<std::endl;
 
 
     //find ply size
-    float x_min=vlist[0]->x;
-    float x_max=vlist[0]->x;
-    float y_min=vlist[0]->y;
-    float y_max=vlist[0]->y;
-    float z_min=vlist[0]->z;
-    float z_max=vlist[0]->z;
-    for (j = 1; j < nverts; j++) {
-        if (vlist[j]->x > x_max) x_max=vlist[j]->x;
-        if (vlist[j]->x < x_min) x_min=vlist[j]->x;
-        if (vlist[j]->y > y_max) y_max=vlist[j]->y;
-        if (vlist[j]->y < y_min) y_min=vlist[j]->y;
-        if (vlist[j]->z > z_max) z_max=vlist[j]->z;
-        if (vlist[j]->z < z_min) z_min=vlist[j]->z;
+    float x_min=vlist_total[0]->x;
+    float x_max=vlist_total[0]->x;
+    float y_min=vlist_total[0]->y;
+    float y_max=vlist_total[0]->y;
+    float z_min=vlist_total[0]->z;
+    float z_max=vlist_total[0]->z;
+    for (long j = 1; j < vlist_total.size(); j++) {
+        if (vlist_total[j]->x > x_max) x_max=vlist_total[j]->x;
+        if (vlist_total[j]->x < x_min) x_min=vlist_total[j]->x;
+        if (vlist_total[j]->y > y_max) y_max=vlist_total[j]->y;
+        if (vlist_total[j]->y < y_min) y_min=vlist_total[j]->y;
+        if (vlist_total[j]->z > z_max) z_max=vlist_total[j]->z;
+        if (vlist_total[j]->z < z_min) z_min=vlist_total[j]->z;
     }
 
     if (_zsiz<1)
@@ -381,28 +393,28 @@ bool VoxImg::load_from_ply (std::string filnam,unsigned short _xsiz, unsigned sh
     float y_maxmin=y_max-y_min+0.00001;
     float z_maxmin=z_max-z_min+0.00001;
     //for each point modify a voxel
-    for (j = 0; j < nverts; j++) {
+    for (long j = 0; j < vlist_total.size(); j++) {
         //std::cout<<vlist[j]->x<<" "<<vlist[j]->y<<" "<<vlist[j]->z<<" "<<vlist[j]->r<<" "<<vlist[j]->g<<" "<<vlist[j]->b<<"\n";
-        x=xsiz*(vlist[j]->x-x_min)/x_maxmin;
-        y=ysiz*(vlist[j]->y-y_min)/y_maxmin;
-        z=zsiz-zsiz*(vlist[j]->z-z_min)/z_maxmin-1;
+        x=xsiz*(vlist_total[j]->x-x_min)/x_maxmin;
+        y=ysiz*(vlist_total[j]->y-y_min)/y_maxmin;
+        z=zsiz-zsiz*(vlist_total[j]->z-z_min)/z_maxmin-1;
         //std::cout<<"vox "<<x<<" "<<y<<" "<<z<<"... "<<std::flush;
 
 
 
 #ifdef VOX_24BIT
         //v=((unsigned int)vlist[j]->r)<<16+((unsigned int)vlist[j]->g)<<8+((unsigned int)vlist[j]->b);
-        v=(((unsigned int)vlist[j]->r)<<16)+(((unsigned int)vlist[j]->g)<<8)+(((unsigned int)vlist[j]->b));
+        v=(((unsigned int)vlist_total[j]->r)<<16)+(((unsigned int)vlist_total[j]->g)<<8)+(((unsigned int)vlist_total[j]->b));
         //std::cout<<"to draw "<<((unsigned int)vlist[j]->r)<<" "<<((unsigned int)vlist[j]->g)<<" "<<((unsigned int)vlist[j]->b)<<" => "<<v<<"\n";
             //std::cout<<v<<" ";
 #else
     #ifdef PALETTE_RRGGGBBB
             //colors RRGGGBBB
-            v=(((unsigned int)vlist[j]->r)&192)+((((unsigned int)vlist[j]->g)>>2)&56)+(((unsigned int)vlist[j]->b)>>5);
+            v=(((unsigned int)vlist_total[j]->r)&192)+((((unsigned int)vlist_total[j]->g)>>2)&56)+(((unsigned int)vlist_total[j]->b)>>5);
     #endif
     #ifdef PALETTE_RRRGGGBB
             //colors RRGGGGBB
-            v=(((unsigned int)vlist[j]->r)&224)+((((unsigned int)vlist[j]->g)>>3)&28)+(((unsigned int)vlist[j]->b)>>6);
+            v=(((unsigned int)vlist_total[j]->r)&224)+((((unsigned int)vlist_total[j]->g)>>3)&28)+(((unsigned int)vlist_total[j]->b)>>6);
     #endif
 #endif
 
