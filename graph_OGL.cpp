@@ -94,10 +94,12 @@ void Graph_OGL::start_frame()
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
+    glBegin(GL_QUADS);
 }
 
 void Graph_OGL::end_frame()
 {
+    glEnd();
     SDL_GL_SwapBuffers();
 }
 
@@ -260,7 +262,6 @@ void Graph_OGL::dessineRectangle(double x,double y, double largeur,double hauteu
     //glPushMatrix();
     glBindTexture(GL_TEXTURE_2D, texture1);
     
-    glBegin(GL_QUADS);
     glTexCoord2d(0,0);
     glVertex2d(x,y);
     glTexCoord2d(1,0);
@@ -269,7 +270,6 @@ void Graph_OGL::dessineRectangle(double x,double y, double largeur,double hauteu
     glVertex2d(x+largeur,y+hauteur);
     glTexCoord2d(0,1);
     glVertex2d(x,y+hauteur);
-    glEnd();
     //glPopMatrix();
 }
 

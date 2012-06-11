@@ -235,20 +235,12 @@ PlyProperty vert_props[] = { /* list of property information for a vertex */
   {(char *)"blue", Float32, Float32, offsetof(Vertex,b), 0, 0, 0, 0}
 };
 
+
+
+///if only one size is given, it will be used for max dimension. the other will be proportional to model size.
 bool VoxImg::load_from_ply (std::string filnam,unsigned short _xsiz, unsigned short _ysiz, unsigned short _zsiz)///create voximg from a ply point cloud
 {
     std::cout<<"enter load_from_ply--------------------------------------------------"<<std::endl;
-    xsiz=_xsiz;
-    ysiz=_ysiz;
-    zsiz=_zsiz;
-    xyzsiz=xsiz*ysiz*zsiz;
-    yzsiz=ysiz*zsiz;
-
-#ifdef VOX_24BIT
-    voxels = (unsigned int *)malloc(xyzsiz*sizeof(unsigned int));
-#else
-    voxels = (unsigned char *)malloc(xyzsiz*sizeof(unsigned char));
-#endif
     
 
     for (int i=0;i<255;i++)
@@ -323,9 +315,7 @@ bool VoxImg::load_from_ply (std::string filnam,unsigned short _xsiz, unsigned sh
     
     std::cout<<"Calculate model size..."<<std::endl;
 
-    //empty voxels
-    for (long i=0;i<xyzsiz;i++)
-      voxels[i]=255;
+
     //find ply size
     float x_min=vlist[0]->x;
     float x_max=vlist[0]->x;
@@ -341,6 +331,44 @@ bool VoxImg::load_from_ply (std::string filnam,unsigned short _xsiz, unsigned sh
         if (vlist[j]->z > z_max) z_max=vlist[j]->z;
         if (vlist[j]->z < z_min) z_min=vlist[j]->z;
     }
+
+    if (_zsiz<1)
+    {
+        if (((x_max-x_min)>=(y_max-y_min))&&((x_max-x_min)>=(z_max-z_min)))
+        {
+            xsiz=_xsiz;
+            ysiz=_xsiz*(y_max-y_min)/(x_max-x_min);
+            zsiz=_xsiz*(z_max-z_min)/(x_max-x_min);
+        }
+        if (((y_max-y_min)>=(x_max-x_min))&&((y_max-y_min)>=(z_max-z_min)))
+        {
+            ysiz=_xsiz;
+            xsiz=_xsiz*(x_max-x_min)/(y_max-y_min);
+            zsiz=_xsiz*(z_max-z_min)/(y_max-y_min);
+        }
+        if (((z_max-z_min)>=(x_max-x_min))&&((z_max-z_min)>=(y_max-y_min)))
+        {
+            zsiz=_xsiz;
+            xsiz=_xsiz*(x_max-x_min)/(z_max-z_min);
+            ysiz=_xsiz*(y_max-y_min)/(z_max-z_min);
+        }
+    }else{
+        xsiz=_xsiz;
+        ysiz=_ysiz;
+        zsiz=_zsiz;
+    }
+    xyzsiz=xsiz*ysiz*zsiz;
+    yzsiz=ysiz*zsiz;
+
+#ifdef VOX_24BIT
+    voxels = (unsigned int *)malloc(xyzsiz*sizeof(unsigned int));
+#else
+    voxels = (unsigned char *)malloc(xyzsiz*sizeof(unsigned char));
+#endif
+    //empty voxels
+    for (long i=0;i<xyzsiz;i++)
+      voxels[i]=255;
+
 
     std::cout<<"Voxelization..."<<std::endl;
 #ifdef VOX_24BIT

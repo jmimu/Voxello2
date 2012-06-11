@@ -27,8 +27,29 @@ Test program for a voxel-based engine.
 Needs SFMLv2. There is a SDL version, but without color.
 
 How to compile:
+
+* Game SFML version :
 qmake voxello2appli.pro
 make
+./voxello2appli
+
+* Game OGL version :
+qmake voxello2appli_OGL.pro
+make
+./voxello2appli_OGL
+
+
+* ply viewer SFML version :
+qmake voxello2appli_show_ply.pro
+make
+./voxello2appli_show_ply
+
+* ply viewer OGL version :
+qmake voxello2appli_show_ply_OGL.pro
+make
+./voxello2appli_show_ply_OGL
+
+
 
 
 

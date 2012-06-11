@@ -28,8 +28,8 @@ SOURCES += appli_SDL.cpp \
     SDL_draw/Draw_HLine.c \
     SDL_draw/Draw_Pixel.c \
     SDL_draw/Draw_Round.c \
-    SDL_draw/SDL_draw.c
-
+    SDL_draw/SDL_draw.c \
+    ply_io/ply_io.c
 HEADERS += \
     voximg.h \
     voxspr.h \
@@ -41,8 +41,9 @@ HEADERS += \
     pt3d.h \
     graph_SDL.h \
     draw_vox_ortho.h \
-    SDL_draw/SDL_draw.h
-
+    SDL_draw/SDL_draw.h \
+    ply_io/ply_io.h \
+    compil.h
 
 LIBS += -lSDL -lSDL_gfx
 
