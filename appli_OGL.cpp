@@ -217,8 +217,8 @@ int main(int argc, char *argv[])
                     break;
                 
                 case SDL_MOUSEMOTION:
-                    angleZ -= event.motion.xrel*0.01;
-                    angleX += event.motion.yrel*0.01;
+                    angleZ -= event.motion.xrel*0.02;
+                    angleX += event.motion.yrel*0.02;
                     draw->update_camera(100,100,0,angleX,angleY,angleZ);
                 break;
 

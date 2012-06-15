@@ -2,6 +2,10 @@
 #define GRAPH_H
 
 #include "pt3d.h"
+
+#define LARGEUR_FENETRE 256*2
+#define HAUTEUR_FENETRE 192*2
+
 /***
     Generic class to handle :
      - window opening

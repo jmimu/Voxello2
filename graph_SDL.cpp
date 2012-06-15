@@ -161,8 +161,8 @@ void Graph_SDL::create_one_voxel_picture(Pt3d &M_000_c,Pt3d &vect_vox_x_c,Pt3d &
 void Graph_SDL::draw_1_voxel(int x,int y,unsigned short r,unsigned short g,unsigned short b,unsigned short a)
 {
     SDL_Rect position;
-    position.x=512-(SUB_PICTURE_SIZE>>1)+surface_coverage.x+x;
-    position.y=384-(SUB_PICTURE_SIZE>>1)+surface_coverage.y+y;
+    position.x=(LARGEUR_FENETRE>>1)-(SUB_PICTURE_SIZE>>1)+surface_coverage.x+x;
+    position.y=(HAUTEUR_FENETRE>>1)-(SUB_PICTURE_SIZE>>1)+surface_coverage.y+y;
     //std::cout<<"draw: "<<position.x<<" "<<position.y<<"\n";
     SDL_BlitSurface(one_voxel_picture, &surface_coverage, screen , &position);//very slow!
 }

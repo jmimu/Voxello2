@@ -89,8 +89,8 @@ void Draw_Vox_Ortho::update_camera(double x,double y,double z,double ang_x,doubl
 
 void Draw_Vox_Ortho::draw_pt(const Pt2d &p)
 {
-    m_graph->line(p.x*m_graph->ORTHO_ZOOM+512-1,p.y*m_graph->ORTHO_ZOOM+384-1,p.x*m_graph->ORTHO_ZOOM+512+1,p.y*m_graph->ORTHO_ZOOM+384+1,0xCC,0x50,0x50);
-    m_graph->line(p.x*m_graph->ORTHO_ZOOM+512-1,p.y*m_graph->ORTHO_ZOOM+384+1,p.x*m_graph->ORTHO_ZOOM+512+1,p.y*m_graph->ORTHO_ZOOM+384-1,0xCC,0x50,0x50);
+    m_graph->line(p.x*m_graph->ORTHO_ZOOM+(LARGEUR_FENETRE>>1)-1,p.y*m_graph->ORTHO_ZOOM+(HAUTEUR_FENETRE>>1)-1,p.x*m_graph->ORTHO_ZOOM+(LARGEUR_FENETRE>>1)+1,p.y*m_graph->ORTHO_ZOOM+(HAUTEUR_FENETRE>>1)+1,0xCC,0x50,0x50);
+    m_graph->line(p.x*m_graph->ORTHO_ZOOM+(LARGEUR_FENETRE>>1)-1,p.y*m_graph->ORTHO_ZOOM+(HAUTEUR_FENETRE>>1)+1,p.x*m_graph->ORTHO_ZOOM+(LARGEUR_FENETRE>>1)+1,p.y*m_graph->ORTHO_ZOOM+(HAUTEUR_FENETRE>>1)-1,0xCC,0x50,0x50);
 }
 
 

@@ -183,8 +183,8 @@ void Graph_SFML::create_one_voxel_picture(Pt3d &M_000_c,Pt3d &vect_vox_x_c,Pt3d 
 
 void Graph_SFML::draw_1_voxel(int x,int y,unsigned short r,unsigned short g,unsigned short b,unsigned short a)
 {
-    int position_x=512-(SUB_PICTURE_SIZE>>1)+surface_coverage.left+x;
-    int position_y=384-(SUB_PICTURE_SIZE>>1)+surface_coverage.top+y;
+    int position_x=(LARGEUR_FENETRE>>1)-(SUB_PICTURE_SIZE>>1)+surface_coverage.left+x;
+    int position_y=(LARGEUR_FENETRE>>1)-(SUB_PICTURE_SIZE>>1)+surface_coverage.top+y;
 
     sprite_voxel.setPosition(position_x,position_y);
     sprite_voxel.setColor(sf::Color(r,g,b,a));

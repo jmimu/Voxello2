@@ -25,11 +25,12 @@ int main(int argc, char *argv[])
     VoxImg test("data/perso_stand.vox",0,VOX_FILE);
     
     std::vector<std::string> ply_filenames;
-    ply_filenames.push_back("data/boudha1.ply");
+    ply_filenames.push_back("data/AperiCloud4.ply");
+    /*ply_filenames.push_back("data/boudha1.ply");
     ply_filenames.push_back("data/boudha2.ply");
-    ply_filenames.push_back("data/boudha3.ply");
+    ply_filenames.push_back("data/boudha3.ply");*/
     
-    test.load_from_ply(ply_filenames,200);
+    test.load_from_ply(ply_filenames,50);
     //test.load_from_ply("data/NuageImProf_LeChantier_Etape_5.ply",200,200,100);
     //test.load_from_ply("data/boudha.ply",100,100,60);
     Vox_Scene scene(test);

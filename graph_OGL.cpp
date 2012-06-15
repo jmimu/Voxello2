@@ -4,8 +4,6 @@
 #include <iostream>
 
 
-#define LARGEUR_FENETRE 256*4
-#define HAUTEUR_FENETRE 192*4
 
 Graph_OGL::Graph_OGL():Graph(),screen(NULL),one_voxel_picture_big(0),one_voxel_picture(0)
 {
@@ -275,6 +273,6 @@ void Graph_OGL::dessineRectangle(double x,double y, double largeur,double hauteu
 
 void Graph_OGL::draw_1_voxel(int x,int y,unsigned short r,unsigned short g,unsigned short b,unsigned short a)
 {
-    dessineRectangle(512-(picture_size>>1)+x,384-(picture_size>>1)+y,picture_size,picture_size,r,g,b,a);
+    dessineRectangle((LARGEUR_FENETRE>>1)-(picture_size>>1)+x,(HAUTEUR_FENETRE>>1)-(picture_size>>1)+y,picture_size,picture_size,r,g,b,a);
 }
     
