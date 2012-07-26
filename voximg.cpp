@@ -344,6 +344,14 @@ bool VoxImg::load_from_ply (std::vector<std::string> filnames,unsigned short _xs
         if (vlist_total[j]->z < z_min) z_min=vlist_total[j]->z;
     }
 
+    std::cout<<"Cloud size: ("<<x_min<<","<<y_min<<","<<z_min<<") - ("<<x_max<<","<<y_max<<","<<z_max<<")"<<std::endl;
+/*    x_min=-35;
+    x_max=17;
+    y_min=-8;
+    y_max= 7;
+    z_min=-2;
+    z_max= 8;*/
+
     if (_zsiz<1)
     {
         if (((x_max-x_min)>=(y_max-y_min))&&((x_max-x_min)>=(z_max-z_min)))
@@ -398,6 +406,7 @@ bool VoxImg::load_from_ply (std::vector<std::string> filnames,unsigned short _xs
         x=xsiz*(vlist_total[j]->x-x_min)/x_maxmin;
         y=ysiz*(vlist_total[j]->y-y_min)/y_maxmin;
         z=zsiz-zsiz*(vlist_total[j]->z-z_min)/z_maxmin-1;
+        if ((x<0)||(x>=xsiz)||(y<0)||(y>=ysiz)||(z<0)||(z>=zsiz)) continue;
         //std::cout<<"vox "<<x<<" "<<y<<" "<<z<<"... "<<std::flush;
 
 

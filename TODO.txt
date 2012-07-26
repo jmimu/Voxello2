@@ -1,3 +1,5 @@
+make OGL faster : http://www.malgouyres.fr/opengl
+
 delete vlist after ply reading ?
 
 add artificial light ?
